@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dirigo_ni_frame_grabber"
+version = "0.1.0"
+description = "Plugin to use NI frame grabbers with Dirigo."
+authors = [
+    {name = "T. D. Weber", email = "tweber@mit.edu"}
+]
+license = {text = "MIT"}
+dependencies = [
+    "imaqbindings"
+]
+
+[project.entry-points."dirigo_frame_grabbers"]
+ni_frame_grabber = "dirigo_ni_frame_grabber:NIFrameGrabber"
