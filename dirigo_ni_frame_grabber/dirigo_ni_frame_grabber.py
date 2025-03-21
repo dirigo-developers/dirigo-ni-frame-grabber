@@ -32,6 +32,7 @@ class NIFrameGrabber(FrameGrabber):
     
     @property
     def total_pixels_width(self):
+        """Physical number of sensor pixels wide."""
         return self._board.get_attribute(
             Im.SessionInformation.IMG_ATTR_ACQWINDOW_WIDTH
         )
