@@ -31,7 +31,7 @@ class NIFrameGrabber(FrameGrabber):
         return message
     
     @property
-    def total_pixels_width(self):
+    def pixels_width(self):
         return self._board.get_attribute(
             Im.SessionInformation.IMG_ATTR_ACQWINDOW_WIDTH
         )
@@ -43,6 +43,20 @@ class NIFrameGrabber(FrameGrabber):
     @property
     def roi_width(self):
         return self._board.get_attribute(Im.Image.IMG_ATTR_ROI_WIDTH)
+    
+    @roi_width.setter
+    def roi_width(self, width: int):
+        # validate?
+        self._board.set_attribute_2(Im.Image.IMG_ATTR_ROI_WIDTH, width)
+
+    @property
+    def roi_left(self):
+        return self._board.get_attribute(Im.Image.IMG_ATTR_ROI_LEFT)
+    
+    @roi_left.setter
+    def roi_left(self, left: int):
+        # validate?
+        self._board.set_attribute_2(Im.Image.IMG_ATTR_ROI_LEFT, left)
 
     @property
     def bytes_per_pixel(self):
