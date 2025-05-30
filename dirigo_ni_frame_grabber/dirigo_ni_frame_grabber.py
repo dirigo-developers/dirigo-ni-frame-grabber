@@ -1,5 +1,6 @@
 import ctypes
 from ctypes import POINTER, c_int8
+from typing import Optional
 
 from imaqbindings import Board as IMAQBoard
 from imaqbindings import Buffer as IMAQBuffer
@@ -15,19 +16,15 @@ class NIFrameGrabber(FrameGrabber):
     def serial_write(self, message):
         self._board.session_serial_write(message)
     
-    def serial_read(self):
+    def serial_read(self, nbytes: Optional[int] = None):
         """
-        Reads up to the specified termination character (e.g. \r).
+        Reads up to nbytes. If nbytes is not specified, then reads up to the 
+        specified termination character (e.g. \r).
         """
-        message = self._board.session_serial_read()
-        return message
-    
-    def serial_read_nbytes(self, nbytes):
-        """
-        Alternative read method that reads individual bytes and does not stop at 
-        terminator characters.
-        """
-        message = self._board.session_serial_read_bytes(nbytes)
+        if nbytes is None:
+            message = self._board.session_serial_read()
+        else:
+            message = self._board.session_serial_read_bytes(nbytes)
         return message
     
     @property
