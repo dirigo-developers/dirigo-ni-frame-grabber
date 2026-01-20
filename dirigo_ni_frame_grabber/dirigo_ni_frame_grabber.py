@@ -30,14 +30,21 @@ class NIFrameGrabberConfig(FrameGrabberConfig):
     """
     NI-IMAQ frame grabber transport.
     """
+    vendor: str = Field(
+        default="NI",
+        json_schema_extra={"ui": {"hidden": True}},
+    )
+    # Model is introspected by the device
+    model: None = Field(
+        default=None,
+        json_schema_extra={"ui": {"hidden": True}},
+    )
     device_name: str = Field(..., description="NI-IMAQ device name (e.g. img0).")
-
 
 
 class NIFrameGrabber(FrameGrabber):
     config_model: ClassVar[type[FrameGrabberConfig]] = NIFrameGrabberConfig
     title = "NI-IMAQ Frame Grabber"
-    locked_vendor = "NI"
 
     def __init__(self, cfg: NIFrameGrabberConfig, **kwargs):
         super().__init__(cfg, **kwargs)
