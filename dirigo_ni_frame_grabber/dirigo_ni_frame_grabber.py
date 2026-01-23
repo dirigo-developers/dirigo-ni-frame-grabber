@@ -31,7 +31,7 @@ class NIFrameGrabberConfig(FrameGrabberConfig):
     NI-IMAQ frame grabber transport.
     """
     vendor: str = Field(
-        default="NI",
+        default="National Instruments",
         json_schema_extra={"ui": {"hidden": True}},
     )
     # Model is introspected by the device
@@ -57,13 +57,21 @@ class NIFrameGrabber(FrameGrabber):
         self._buffers_transferred: int = 0
         self._streaming: bool = False
 
-    def _introspect_model(self) -> str | None:
+    def _introspect_identity(self) -> dict[str, str]:
+        introspected = {}
+        
         board = self._require_connected()
+        
         iface = board.get_attribute(Im.DeviceInformation.IMG_ATTR_INTERFACE_TYPE)
         if iface not in _INTERFACE_TYPE_TO_MODEL:
             raise RuntimeError("Unsupported framegrabber model")
-        return _INTERFACE_TYPE_TO_MODEL[iface]
+        introspected["model"] = _INTERFACE_TYPE_TO_MODEL[iface]
 
+        d = board.get_attribute(Im.DeviceInformation.IMG_ATTR_GETSERIAL)
+        introspected["serial"] = hex(d)[2:].upper()
+        
+        return introspected
+    
     def _connect_impl(self) -> None:
         self._board = IMAQBoard(self._device_name)
 
