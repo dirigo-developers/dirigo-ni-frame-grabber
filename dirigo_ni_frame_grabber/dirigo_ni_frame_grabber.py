@@ -17,6 +17,14 @@ class NIFrameGrabber(FrameGrabber):
         self._board = IMAQBoard(device_name)
         self._lines_per_buffer: Optional[int] = None
 
+        # configuring output trigger
+        self._board.session_trigger_drive_2(
+            trigger_type = Im.SignalType.IMG_SIGNAL_EXTERNAL,
+            trigger_number = 0,
+            polarity = Im.TriggerPolarity.IMG_TRIG_POLAR_ACTIVEH,
+            source = Im.TriggerDrive.IMG_TRIG_DRIVE_HSYNC
+        )
+
     def serial_write(self, message):
         self._board.session_serial_write(message)
     
